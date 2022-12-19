@@ -14,4 +14,7 @@ spring:
     com.zaxxer.hikari.HikariConfig : DEBUG
 server:
   port: 8080
+security:
+  basic:
+
 ---
