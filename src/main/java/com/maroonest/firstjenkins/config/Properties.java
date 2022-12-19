@@ -9,4 +9,5 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("spring")
 public class Properties {
+
 }
