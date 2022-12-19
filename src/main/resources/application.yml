@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://129.154.222.35:3306/blog?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username : maroonest
+    password : Vkfkrhs8985!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  devtools:
+    livereload:
+      enabled=true:logging:
+  level:
+    com.zaxxer.hikari: TRACE
+    com.zaxxer.hikari.HikariConfig : DEBUG
+server:
+  port: 8080
+---
