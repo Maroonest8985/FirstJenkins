@@ -1,0 +1,87 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Github clone') {
+            steps {
+                checkout(
+                        [$class: 'GitSCM',
+                         branches: [[name: '*/master']],
+                         extensions:
+                                 [[$class: 'SubmoduleOption',
+                                   disableSubmodules: false,
+                                   parentCredentials: true,
+                                   recursiveSubmodules: false,
+                                   reference: '',
+                                   trackingSubmodules: true]],
+                         userRemoteConfigs:
+                                 [[credentialsId: 'gitlab-userpass',
+                                   url: "${REPOSITORY_URL}"]]
+                        ]
+                )
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh "./gradlew ${SERVICE_NAME}:clean ${SERVICE_NAME}:build -x test"
+            }
+        }
+
+        stage('Code Quality') {
+            steps {
+                script {
+                    withSonarQubeEnv(credentialsId: 'sonarqube-token') {
+                        sh "./gradlew ${SERVICE_NAME}:sonarqube -Dsonar.projectKey=${SERVICE_NAME}"
+                    }
+                }
+            }
+        }
+
+        stage('Building image') {
+            steps {
+                dir("${SERVICE_HOME}") {
+                    script {
+                        dockerImage = docker.build("${NAMESPACE}/${CONTAINER_NAME}:${env.BUILD_NUMBER}")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Image') {
+            steps {
+                script {
+                    docker.withRegistry("http://${REGISTRY_HOST}:${REGISTRY_PORT}", "${REGISTRY_CREDENTIAL}") {
+                        dockerImage.push("${env.BUILD_NUMBER}")
+                        dockerImage.push("latest")
+                    }
+                    echo "Image Push complete"
+                }
+            }
+        }
+
+        stage('Remove Unused docker image') {
+            steps {
+                sh "docker rmi ${NAMESPACE}/${CONTAINER_NAME}:${env.BUILD_NUMBER}"
+            }
+        }
+
+        stage('Deploy on kubernetes') {
+            steps {
+                script {
+                    sh "kubectl --kubeconfig=/var/jenkins_home/kube-config.yaml rollout restart deployment.apps/${CONTAINER_NAME} -n ${NAMESPACE}"
+                }
+            }
+        }
+    }
+    post {
+        success {
+            slackSend (channel: "$SLACK_CHANNEL", color: '#00FF00', message: "SUCCESS: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+            slackSend (channel: "$SLACK_CHANNEL", color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+    }
+}
+
+
