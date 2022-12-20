@@ -8,13 +8,11 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   devtools:
     livereload:
-      enabled=true:logging:
-  level:
-    com.zaxxer.hikari: TRACE
-    com.zaxxer.hikari.HikariConfig : DEBUG
+      enabled: true
+  logging:
+    level:
+      com.zaxxer.hikari: TRACE
+      com.zaxxer.hikari.HikariConfig : DEBUG
 server:
   port: 8080
-security:
-  basic:
-
 ---
