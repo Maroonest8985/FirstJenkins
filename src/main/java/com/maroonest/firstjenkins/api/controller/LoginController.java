@@ -13,7 +13,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public String Login(@RequestBody LoginVO loginVO) {
-        return loginVO.getUsername() + " :" + loginVO.getPassword();
+        return loginVO.getUsername() + " : " + loginVO.getPassword();
     }
 }
 
