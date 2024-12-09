@@ -1,3 +1,11 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'FirstJenkins'
 
 include ':common'
+
+include ':service:auth'
