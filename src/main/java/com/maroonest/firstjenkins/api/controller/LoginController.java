@@ -10,7 +10,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String LoginController(String id, String passwd){
-        return "Success";
+        return "Su ccess";
     }
 }
 
