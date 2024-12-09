@@ -1,10 +1,10 @@
-package vo;
+package com.maroonest.common.data;
 
 
 import lombok.Data;
 
 @Data
-public class LoginVo {
+public class LoginVO {
     String username;
     String password;
 }

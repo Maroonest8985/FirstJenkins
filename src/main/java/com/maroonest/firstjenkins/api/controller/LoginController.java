@@ -1,19 +1,19 @@
 package com.maroonest.firstjenkins.api.controller;
 
+import com.maroonest.common.data.LoginVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import vo.LoginVo;
 
 @Controller
 @RestController
 public class LoginController {
 
     @PostMapping("/login")
-    public String LoginController(@RequestBody LoginVo loginVo) {
-        return loginVo.getUsername() + ":" + loginVo.getPassword();
+    public String Login(@RequestBody LoginVO loginVO) {
+        return loginVO.getUsername() + ":" + loginVO.getPassword();
     }
 }
 
