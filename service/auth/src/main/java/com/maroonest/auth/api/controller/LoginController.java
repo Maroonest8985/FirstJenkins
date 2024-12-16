@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
 
-    @CrossOrigin(origins="*")
     @PostMapping("/login")
     public String Login(@RequestBody LoginVO loginVO) {
         log.info("SUCCEED");
