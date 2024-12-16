@@ -13,6 +13,7 @@ spring:
     level:
       com.zaxxer.hikari: TRACE
       com.zaxxer.hikari.HikariConfig : DEBUG
+      org.springframework.web.cors.DefaultCorsProcessor: TRACE
 server:
   port: 9091
 ---
