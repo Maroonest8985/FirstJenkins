@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @PostMapping("/login")
-    public String Login(@RequestBody LoginVO loginVO) {
+    public LoginVO Login(@RequestBody LoginVO loginVO) {
         log.info("SUCCEED");
 
 
-        return loginVO.getUsername() + " : " + loginVO.getPassword();
+
+        return loginVO;
     }
 }
